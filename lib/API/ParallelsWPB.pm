@@ -47,16 +47,23 @@ sub f_request {
     $url .= join( '/', @{ $url_array }) . '/';
 
     my $post_data;
-    if ( $data->{req_type} eq 'POST' && $data->{post_data} ) {
-
-        confess "parameter post_data must be hashref!" unless ( ref $data->{post_data} eq 'HASH' );
+    if ( $data->{req_type} eq 'POST' || $data->{req_type} eq 'PUT' ) {
+        $data->{post_data} ||= {};
+        unless ( ref $data->{post_data} eq 'HASH' || ref $data->{post_data} eq 'ARRAY' ) {
+            confess "parameter post_data must be hashref or arrayref!"
+        }
         $post_data = JSON->new->utf8->encode( $data->{post_data} );
     }
     $post_data ||= '{}';
 
     my ( $response, $error ) = $self->_send_request( $data, $url, $post_data );
 
-    return $response ? $response : $error;
+    if ( wantarray ) {
+        return ( $response, $error )
+    }
+    else {
+        return $response ? $response : $error;
+    }
 }
 
 sub _send_request {
@@ -64,7 +71,8 @@ sub _send_request {
 
     my $ua = LWP::UserAgent->new();
     my $req = HTTP::Request->new( $data->{req_type} => $url );
-    if ( $data->{req_type} eq 'POST' ) {
+
+    if ( $data->{req_type} eq 'POST' || $data->{req_type} eq 'PUT' ) {
         $req->header('content-type' => 'application/json');
         $req->content($post_data);
     }
@@ -79,6 +87,9 @@ sub _send_request {
         alarm $self->{timeout};
         $ua->request($req);
     };
+    alarm 0;
+
+    warn $res->as_string if ( $self->{debug} );
 
     if ( !$res || $@ || ref $res && $res->status_line =~ /connection timeout/ ) {
         return ('', 'connection timeout')
