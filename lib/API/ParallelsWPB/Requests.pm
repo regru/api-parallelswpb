@@ -10,8 +10,6 @@ use base  qw/ API::ParallelsWPB /;
 
 our $VERSION = '0.01';
 
-no if $] >= 5.018, warnings => "experimental::smartmatch";  # hello, perl-5.18
-
 =head1 METHODS
 
 =over
@@ -32,7 +30,7 @@ sub get_version {
 
 Creating a site
 
-$param:
+%param:
     state
     publicationSettings
     ownerinfo
@@ -41,35 +39,33 @@ $param:
 =cut
 
 sub create_site {
-    my ( $self, $param ) = @_;
+    my ( $self, %param ) = @_;
 
     my @post_array;
     for ( qw/ state publicationSettings ownerInfo isPromoFooterVisible /) {
-        push @post_array, { $_ => lc $param->{$_} } if ( lc $param->{$_} );
+        push @post_array, { $_ => lc $param{$_} } if ( lc $param{$_} );
     }
     my $res = $self->f_request( [ 'sites' ], {
         req_type  => 'post',
         post_data => \@post_array,
     });
 
-    # TODO: выдернуть из ответа siteuuid и добавить в объект
-    #....
+    return $res;
 }
 
 sub gen_token {
-    my ( $self, $param ) = @_;
+    my ( $self, %param ) = @_;
 
-    $param->{localecode} ||= 'en_US';
-    $param->{sessionlifetime} ||= '1800';
+    $param{localecode} ||= 'en_US';
+    $param{sessionlifetime} ||= '1800';
 
-    my $siteuuid = $param->{siteuuid} ? $param->{siteuuid} : $self->{siteuuid};
-    confess "Required parameter siteuuid!" unless ( $siteuuid );
+    my $siteuuid = $self->_check_siteuuid( %param );
 
     return $self->f_request( [ 'sites', $siteuuid, 'token' ], {
         req_type  => 'post',
         post_data => [
-            { localeCode => $param->{localecode} },
-            { sessionLifeTime => $param->{sessionlifetime} },
+            { localeCode => $param{localecode} },
+            { sessionLifeTime => $param{sessionlifetime} },
         ],
     });
 }
@@ -81,10 +77,9 @@ sub deploy {
 }
 
 sub get_site_info {
-    my ( $self, $siteuuid ) = @_;
+    my ( $self, %param ) = @_;
 
-    $siteuuid ||= $self->{siteuuid};
-    confess "Required parameter siteuuid!" unless ( $siteuuid );
+    my $siteuuid = $self->_check_siteuuid( %param );
 
     return $self->f_request( [ 'sites', $siteuuid ], { req_type => 'get' } );
 }
@@ -108,10 +103,9 @@ sub publish {
 }
 
 sub delete_site {
-    my ( $self, $siteuuid ) = @_;
+    my ( $self, %param ) = @_;
 
-    $siteuuid ||= $self->{siteuuid};
-    confess "Required parameter siteuuid!" unless ( $siteuuid );
+    my $siteuuid = $self->_check_siteuuid( %param );
 
     return $self->f_request( [ 'sites', $siteuuid ], { req_type => 'delete' } );
 }
@@ -123,10 +117,9 @@ sub get_promo_footer {
 }
 
 sub get_site_custom_variable {
-    my ( $self, $siteuuid ) = @_;
+    my ( $self, %param ) = @_;
 
-    $siteuuid ||= $self->{siteuuid};
-    confess "Required parameter siteuuid!" unless ( $siteuuid );
+    my $siteuuid = $self->_check_siteuuid( %param );
 
     return $self->f_request( [ 'sites', $siteuuid, 'custom-properties' ], { req_type => 'get' } );
 }
@@ -168,10 +161,9 @@ sub change_promo_footer {
 }
 
 sub set_site_promo_footer_visible {
-    my ( $self, $siteuuid ) = @_;
+    my ( $self, %param ) = @_;
 
-    $siteuuid ||= $self->{siteuuid};
-    confess "Required parameter siteuuid!" unless ( $siteuuid );
+    my $siteuuid = $self->_check_siteuuid( %param );
 
     return $self->f_request( [ 'sites', $siteuuid ], {
             req_type  => 'put',
@@ -180,10 +172,9 @@ sub set_site_promo_footer_visible {
 }
 
 sub set_site_promo_footer_invisible {
-    my ( $self, $siteuuid ) = @_;
+    my ( $self, %param ) = @_;
 
-    $siteuuid ||= $self->{siteuuid};
-    confess "Required parameter siteuuid!" unless ( $siteuuid );
+    my $siteuuid = $self->_check_siteuuid( %param );
 
     return $self->f_request( [ 'sites', $siteuuid ], {
             req_type  => 'put',
@@ -191,6 +182,14 @@ sub set_site_promo_footer_invisible {
     });
 }
 
+sub _check_siteuuid {
+    my ( $self, %param ) = @_;
+
+    my $siteuuid = $param{siteuuid} ? $param{siteuuid} : $self->{siteuuid};
+    confess "Required parameter siteuuid!" unless ( $siteuuid );
+
+    return $siteuuid;
+}
 =back
 
 =cut
