@@ -10,6 +10,8 @@ use base  qw/ API::ParallelsWPB /;
 
 our $VERSION = '0.01';
 
+use constant  (LOCALE => 'en_US', SESSION_LIFETIME => 1800 );
+
 =head1 METHODS
 
 =over
@@ -71,9 +73,17 @@ sub gen_token {
 }
 
 sub deploy {
-    my ( $self, $param ) = @_;
+    my ( $self, %param ) = @_;
 
-    return 1;
+    $param{localeCode} ||= $self->LOCALE;
+    my $siteuuid = $self->_check_siteuuid( %param );
+
+    my @post_data = map { { $_ => $param{ $_ }} } keys %param;
+
+    return $self->f_request( [ 'sites', $siteuuid, 'deploy' ], {
+        req_type  => 'post',
+        post_data => \@post_data
+    });
 }
 
 sub get_site_info {
@@ -186,7 +196,7 @@ sub _check_siteuuid {
     my ( $self, %param ) = @_;
 
     my $siteuuid = $param{siteuuid} ? $param{siteuuid} : $self->{siteuuid};
-    confess "Required parameter siteuuid!" unless ( $siteuuid );
+    confess "Required parameter siteuuid missing!" unless ( $siteuuid );
 
     return $siteuuid;
 }
