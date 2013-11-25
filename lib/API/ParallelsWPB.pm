@@ -7,6 +7,7 @@ use LWP::UserAgent;
 use HTTP::Request;
 use JSON;
 use Carp;
+use API::ParallelsWPB::Response;
 
 our $VERSION = '0.01';
 
@@ -26,9 +27,7 @@ sub new {
         (@_)
     };
 
-    confess "Required username!" unless $self->{username};
-    confess "Required password!" unless $self->{password};
-    confess "Required server!" unless $self->{server};
+    map { confess "Field '" . $_ . "' required!" unless $self->{ $_ } } qw/username password server/;
 
     return bless $self, $class;
 }
@@ -56,14 +55,16 @@ sub f_request {
     }
     $post_data ||= '{}';
 
-    my ( $response, $error ) = $self->_send_request( $data, $url, $post_data );
+    # my ( $response, $error ) = $self->_send_request( $data, $url, $post_data );
+    my $response = $self->_send_request($data, $url, $post_data);
+    return $response;
 
-    if ( wantarray ) {
-        return ( $response, $error )
-    }
-    else {
-        return $response ? $response : $error;
-    }
+    # if ( wantarray ) {
+    #     return ( $response, $error )
+    # }
+    # else {
+    #     return $response ? $response : $error;
+    # }
 }
 
 sub _send_request {
@@ -82,6 +83,7 @@ sub _send_request {
 
     warn $req->as_string if ( $self->{debug} );
 
+    # TODO: $ua->timeout 
     my $res = eval {
         local $SIG{ALRM} = sub { die "connection timeout" };
         alarm $self->{timeout};
@@ -95,7 +97,9 @@ sub _send_request {
         return ('', 'connection timeout')
     }
 
-    return $res->is_success() ? ($res->content(), '') : ('', $res->status_line);
+    my $response = API::ParallelsWPB::Response->new($res);
+    return $response;
+    # return $res->is_success() ? ($res->content(), '') : ('', $res->status_line);
 }
 
 1;
