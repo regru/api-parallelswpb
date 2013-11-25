@@ -4,17 +4,16 @@ use strict;
 use warnings;
 
 use Carp;
-use JSON;
 
 use base qw/ API::ParallelsWPB /;
 
 our $VERSION = '0.01';
 
 use constant {
+    DEFAULT_LOCALE_CODE       => 'en_US',
+    DEFAULT_TEMPLATE_CODE     => 'generic',
     DEFAULT_CREATE_SITE_STATE => 'trial',
-    LOCALE                    => 'en_US',
-    SESSION_LIFETIME          => 1800,
-    TEMPLATE_CODE => 'generic'
+    DEFAULT_SESSIONLIFETIME   => '1800',
 };
 
 =head1 METHODS
@@ -82,8 +81,8 @@ sub create_site {
 sub gen_token {
     my ( $self, %param ) = @_;
 
-    $param{localeCode}      ||= 'en_US';
-    $param{sessionLifeTime} ||= '1800';
+    $param{localeCode}      ||= DEFAULT_LOCALE_CODE;
+    $param{sessionLifeTime} ||= DEFAULT_SESSIONLIFETIME;
 
     my $siteuuid = $self->_check_siteuuid( %param );
 
@@ -92,13 +91,14 @@ sub gen_token {
         {
             req_type  => 'post',
             post_data => [
-                { localeCode      => $param{localecode} },
-                { sessionLifeTime => $param{sessionlifetime} },
+                {
+                    localeCode      => $param{localeCode},
+                    sessionLifeTime => $param{sessionLifeTime},
+                }
             ],
         }
     );
 }
-
 
 =item B<deploy($self, %param)>
 
@@ -112,14 +112,11 @@ Creates site based on a specified topic.
 sub deploy {
     my ( $self, %param ) = @_;
 
-    $param{localeCode} ||= $self->LOCALE;
-    $param{templateCode} ||= $self->TEMPLATE_CODE;
+    $param{localeCode}   ||= $self->DEFAULT_LOCALE;
+    $param{templateCode} ||= $self->DEFAULT_TEMPLATE_CODE;
     my $siteuuid = $self->_check_siteuuid( %param );
 
-
-    my @post_data = map {
-        $param{$_}
-    } qw/templateCode localeCode title/;
+    my @post_data = map { $param{$_} } qw/templateCode localeCode title/;
 
     return $self->f_request(
         [ 'sites', $siteuuid, 'deploy' ],
