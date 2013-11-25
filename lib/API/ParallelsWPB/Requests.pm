@@ -62,7 +62,7 @@ sub create_site {
         post_data => \@post_array,
     });
 
-    my $siteuuid = $res->response->{response};
+    my $siteuuid = $res->response;
     if ( $siteuuid ) {
         $self->{siteuuid} = $siteuuid;
     }
