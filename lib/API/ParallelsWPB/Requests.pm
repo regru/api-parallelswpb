@@ -217,6 +217,16 @@ sub get_promo_footer {
         { req_type => 'get' } );
 }
 
+=item B<get_site_custom_variable>($self, %param)
+
+Retrieving a List of Custom Variables for a Website
+
+%param:
+
+    uuid
+
+=cut
+
 sub get_site_custom_variable {
     my ( $self, %param ) = @_;
 
@@ -225,11 +235,39 @@ sub get_site_custom_variable {
     return $self->f_request( [ 'sites', $uuid, 'custom-properties' ], { req_type => 'get' } );
 }
 
-sub set_site_custom_variable {
-    my ( $self, $param ) = @_;
+=item B<set_site_custom_variable>($self, %param)
 
-    return 1;
+Setting a Custom Variable for a Website
+
+%param:
+
+    uuid
+    variable1 => value1
+    variable2 => value2
+    ...
+    variableN => valueN
+
+=cut
+
+sub set_site_custom_variable {
+    my ( $self, %param ) = @_;
+
+    my $uuid = $self->_get_uuid( %param );
+
+    delete $param{uuid} if ( exists $param{uuid} );
+    return $self->f_request( [ 'sites', $uuid, 'custom-properties' ],
+        {
+            req_type  => 'put',
+            post_data => [ \%param ],
+        }
+    );
 }
+
+=item B<get_sites_custom_variables>($self)
+
+Retrieving Custom Variables Defined for All Websites
+
+=cut
 
 sub get_sites_custom_variables {
     my ( $self ) = @_;
@@ -238,17 +276,77 @@ sub get_sites_custom_variables {
         { req_type => 'get' } );
 }
 
-sub set_sites_custom_variables {
-    my ( $self, $param ) = @_;
+=item B<set_sites_custom_variables>($self, %param)
 
-    return 1;
+Setting Custom Variables for All Websites
+
+%param:
+
+    variable1 => value1
+    variable2 => value2
+    ...
+    variableN => valueN
+
+=cut
+
+sub set_sites_custom_variables {
+    my ( $self, %param ) = @_;
+
+    return $self->f_request( [ qw/ system custom-properties / ],
+        {
+            req_type  => 'put',
+            post_data => [ \%param ],
+        }
+    );
 }
+
+=item B<set_custom_trial_messages>($self, @param)
+
+Setting Custom Messages for the Trial Mode
+
+    my $response = $api->set_custom_trial_messages(
+        {
+            localeCode  => 'en_US',
+            messages    => {
+                defaultPersonalName => '{message1_en}',
+                editorTopMessageTrialSite => '{message2_en}',
+                initialMailSubject => '{message3_en}',
+                initialMailHtml => '{message4_en}',
+                trialSiteSignUpPublishTitle => '{message5_en}',
+                trialSiteSignUpPublishMsg => '{message6_en}'
+            }
+        },
+        {
+            localeCode  => 'de_DE',
+            messages    => {
+                defaultPersonalName => '{message1_de}',
+                editorTopMessageTrialSite => '{message2_de}',
+                initialMailSubject => '{message3_de}',
+                initialMailHtml => '{message4_de}',
+                trialSiteSignUpPublishTitle => '{message5_de}',
+                trialSiteSignUpPublishMsg => '{message6_de}'
+            }
+        },
+    );
+
+=cut
 
 sub set_custom_trial_messages {
-    my ( $self, $param ) = @_;
+    my ( $self, @param ) = @_;
 
-    return 1;
+    return $self->f_request( [ qw/ system trial-mode messages / ],
+        {
+            req_type  => 'put',
+            post_data => [ \@param ]
+        }
+    );
 }
+
+=item B<get_custom_trial_messages>($self)
+
+Retrieving Custom Messages for the Trial Mode
+
+=cut
 
 sub get_custom_trial_messages {
     my ( $self ) = @_;
@@ -257,10 +355,27 @@ sub get_custom_trial_messages {
         { req_type => 'get' } );
 }
 
-sub change_promo_footer {
-    my ( $self, $param ) = @_;
+=item B<change_promo_footer>($self, %param)
 
-    return 1;
+Changing the Default Content of the Promotional Footer
+
+%param:
+
+    message
+
+=cut
+
+sub change_promo_footer {
+    my ( $self, %param ) = @_;
+
+    confess "Required parameter message!" unless ( $param{message} );
+
+    return $self->f_request( [ qw/ system promo-footer / ],
+        {
+           req_type  => 'put',
+           post_data => [ $param{message} ],
+        }
+    );
 }
 
 sub set_site_promo_footer_visible {
