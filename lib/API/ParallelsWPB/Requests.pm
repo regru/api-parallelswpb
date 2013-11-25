@@ -4,28 +4,74 @@ use strict;
 use warnings;
 
 use Carp;
+use JSON;
 
 use base  qw/ API::ParallelsWPB /;
 
 our $VERSION = '0.01';
 
-# return version of Parallels Presence Builder
+no if $] >= 5.018, warnings => "experimental::smartmatch";  # hello, perl-5.18
+
+=head1 METHODS
+
+=over
+
+=item B<get_version>( $self )
+
+return version of Parallels Presence Builder
+
+=cut
+
 sub get_version {
     my ( $self ) = @_;
 
     return $self->f_request( [ qw/ system version / ], { req_type => 'get' } );
 }
 
+=item B<create_site>( $self,$param )
+
+Creating a site
+
+$param:
+    state
+    publicationSettings
+    ownerinfo
+    ispromofootervisible
+
+=cut
+
 sub create_site {
     my ( $self, $param ) = @_;
 
-    return 1;
+    my @post_array;
+    for ( qw/ state publicationSettings ownerInfo isPromoFooterVisible /) {
+        push @post_array, { $_ => lc $param->{$_} } if ( lc $param->{$_} );
+    }
+    my $res = $self->f_request( [ 'sites' ], {
+        req_type  => 'post',
+        post_data => \@post_array,
+    });
+
+    # TODO: выдернуть из ответа siteuuid и добавить в объект
+    #....
 }
 
 sub gen_token {
     my ( $self, $param ) = @_;
 
-    return 1;
+    $param->{localecode} ||= 'en_US';
+    $param->{sessionlifetime} ||= '1800';
+
+    my $siteuuid = $param->{siteuuid} ? $param->{siteuuid} : $self->{siteuuid};
+    confess "Required parameter siteuuid!" unless ( $siteuuid );
+
+    return $self->f_request( [ 'sites', $siteuuid, 'token' ], {
+        req_type  => 'post',
+        post_data => [
+            { localeCode => $param->{localecode} },
+            { sessionLifeTime => $param->{sessionlifetime} },
+        ],
+    });
 }
 
 sub deploy {
@@ -144,5 +190,9 @@ sub set_site_promo_footer_invisible {
             post_data => [ { isPromoFooterVisible => 'false' } ],
     });
 }
+
+=back
+
+=cut
 
 1;
