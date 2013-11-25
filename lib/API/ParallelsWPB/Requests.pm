@@ -5,13 +5,15 @@ use warnings;
 
 use Carp;
 
-use base  qw/ API::ParallelsWPB /;
+use base qw/ API::ParallelsWPB /;
 
 our $VERSION = '0.01';
 
 use constant {
-    DEFAULT_CREATE_SITE_STATE   => 'trial',
-    DEFAULT_SESSIONLIFETIME     => '1800',
+    DEFAULT_LOCALE_CODE       => 'en_US',
+    DEFAULT_TEMPLATE_CODE     => 'generic',
+    DEFAULT_CREATE_SITE_STATE => 'trial',
+    DEFAULT_SESSIONLIFETIME   => '1800',
 };
 
 =head1 METHODS
@@ -27,7 +29,7 @@ return version of Parallels Presence Builder
 sub get_version {
     my ( $self ) = @_;
 
-    return $self->f_request( [ qw/ system version / ], { req_type => 'get' } );
+    return $self->f_request( [qw/ system version /], { req_type => 'get' } );
 }
 
 =item B<create_site>( $self,$param )
@@ -45,22 +47,25 @@ Creating a site
 sub create_site {
     my ( $self, %param ) = @_;
 
-    $param{state} ||= DEFAULT_CREATE_SITE_STATE;
-    $param{publicationSettings} ||= {};
-    $param{ownerInfo} ||= {};
+    $param{state}                ||= DEFAULT_CREATE_SITE_STATE;
+    $param{publicationSettings}  ||= {};
+    $param{ownerInfo}            ||= {};
     $param{isPromoFooterVisible} ||= '';
 
     my @post_array = (
-        { state => $param{state} },
-        { publicationSettings => $param{publicationSettings} },
-        { ownerInfo => $param{ownerInfo} },
+        { state                => $param{state} },
+        { publicationSettings  => $param{publicationSettings} },
+        { ownerInfo            => $param{ownerInfo} },
         { isPromoFooterVisible => $param{isPromoFooterVisible} }
     );
 
-    my $res = $self->f_request( [ 'sites' ], {
-        req_type  => 'post',
-        post_data => \@post_array,
-    });
+    my $res = $self->f_request(
+        ['sites'],
+        {
+            req_type  => 'post',
+            post_data => \@post_array,
+        }
+    );
 
     my $uuid = $res->response;
     if ( $uuid ) {
@@ -76,7 +81,7 @@ sub create_site {
 sub gen_token {
     my ( $self, %param ) = @_;
 
-    $param{localeCode} ||= 'en_US';
+    $param{localeCode}      ||= DEFAULT_LOCALE_CODE;
     $param{sessionLifeTime} ||= DEFAULT_SESSIONLIFETIME;
 
     my $uuid = $self->_check_uuid( %param );
@@ -90,10 +95,31 @@ sub gen_token {
     });
 }
 
-sub deploy {
-    my ( $self, $param ) = @_;
+=item B<deploy($self, %param)>
 
-    return 1;
+Creates site based on a specified topic.
+    
+    my $response =
+      $client->deploy( localeCode => 'en_US', templateCode => 'music_blog' );
+
+=cut
+
+sub deploy {
+    my ( $self, %param ) = @_;
+
+    $param{localeCode}   ||= $self->DEFAULT_LOCALE;
+    $param{templateCode} ||= $self->DEFAULT_TEMPLATE_CODE;
+    my $siteuuid = $self->_check_siteuuid( %param );
+
+    my @post_data = map { $param{$_} } qw/templateCode localeCode title/;
+
+    return $self->f_request(
+        [ 'sites', $siteuuid, 'deploy' ],
+        {
+            req_type  => 'post',
+            post_data => \@post_data
+        }
+    );
 }
 
 sub get_site_info {
@@ -107,7 +133,7 @@ sub get_site_info {
 sub get_sites_info {
     my ( $self ) = @_;
 
-    return $self->f_request( [ qw/ sites / ], { req_type => 'get' } );
+    return $self->f_request( [qw/ sites /], { req_type => 'get' } );
 }
 
 sub change_site_properties {
@@ -133,7 +159,8 @@ sub delete_site {
 sub get_promo_footer {
     my ( $self ) = @_;
 
-    return $self->f_request( [ qw/ system promo-footer / ], { req_type => 'get' } );
+    return $self->f_request( [qw/ system promo-footer /],
+        { req_type => 'get' } );
 }
 
 sub get_site_custom_variable {
@@ -153,7 +180,8 @@ sub set_site_custom_variable {
 sub get_sites_custom_variables {
     my ( $self ) = @_;
 
-    return $self->f_request( [ qw/ system custom-properties / ], { req_type => 'get' } );
+    return $self->f_request( [qw/ system custom-properties /],
+        { req_type => 'get' } );
 }
 
 sub set_sites_custom_variables {
@@ -171,7 +199,8 @@ sub set_custom_trial_messages {
 sub get_custom_trial_messages {
     my ( $self ) = @_;
 
-    return $self->f_request( [ qw/ system trial-mode messages / ], { req_type => 'get' } );
+    return $self->f_request( [qw/ system trial-mode messages /],
+        { req_type => 'get' } );
 }
 
 sub change_promo_footer {
@@ -188,7 +217,8 @@ sub set_site_promo_footer_visible {
     return $self->f_request( [ 'sites', $uuid ], {
             req_type  => 'put',
             post_data => [ { isPromoFooterVisible => 'true' } ],
-    });
+        }
+    );
 }
 
 sub set_site_promo_footer_invisible {
@@ -199,7 +229,8 @@ sub set_site_promo_footer_invisible {
     return $self->f_request( [ 'sites', $uuid ], {
             req_type  => 'put',
             post_data => [ { isPromoFooterVisible => 'false' } ],
-    });
+        }
+    );
 }
 
 sub _check_uuid {
@@ -210,6 +241,7 @@ sub _check_uuid {
 
     return $uuid;
 }
+
 =back
 
 =cut
