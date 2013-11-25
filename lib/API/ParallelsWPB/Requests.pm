@@ -98,18 +98,24 @@ sub gen_token {
 =item B<deploy($self, %param)>
 
 Creates site based on a specified topic.
-    
+
     my $response =
       $client->deploy( localeCode => 'en_US', templateCode => 'music_blog' );
+
+%param:
+    uuid
+    localeCode
+    templateCode
+    title
 
 =cut
 
 sub deploy {
     my ( $self, %param ) = @_;
 
-    $param{localeCode}   ||= $self->DEFAULT_LOCALE;
+    $param{localeCode}   ||= $self->DEFAULT_LOCALE_CODE;
     $param{templateCode} ||= $self->DEFAULT_TEMPLATE_CODE;
-    my $siteuuid = $self->_check_siteuuid( %param );
+    my $siteuuid = $self->_check_uuid( %param );
 
     my @post_data = map { $param{$_} } qw/templateCode localeCode title/;
 
@@ -122,6 +128,18 @@ sub deploy {
     );
 }
 
+
+=item B<get_site_info($self, %param)>
+
+Returns site info.
+
+
+
+%param:
+    uuid
+
+=cut
+
 sub get_site_info {
     my ( $self, %param ) = @_;
 
@@ -129,6 +147,15 @@ sub get_site_info {
 
     return $self->f_request( [ 'sites', $uuid ], { req_type => 'get' } );
 }
+
+
+=item B<get_sites_info($self)>
+
+Returns list of sites info.
+
+
+
+=cut
 
 sub get_sites_info {
     my ( $self ) = @_;
