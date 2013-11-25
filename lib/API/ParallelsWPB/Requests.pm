@@ -133,8 +133,6 @@ sub deploy {
 
 Returns site info.
 
-
-
 %param:
     uuid
 
@@ -153,8 +151,6 @@ sub get_site_info {
 
 Returns list of sites info.
 
-
-
 =cut
 
 sub get_sites_info {
@@ -163,11 +159,29 @@ sub get_sites_info {
     return $self->f_request( [qw/ sites /], { req_type => 'get' } );
 }
 
-sub change_site_properties {
-    my ( $self, $param ) = @_;
+=item B<change_site_properties($self, %param)>
 
-    return 1;
+
+=cut
+
+sub change_site_properties {
+    my ( $self, %param ) = @_;
+
+    my $uuid = $self->_check_uuid( %param );
+
+    # my @post_data = map { $_ => $param{$_} } grep { defined $param{$_}}
+    #   qw/state publicationSettings ownerInfo isPromoFooterVisible/;
+    use Data::Dumper;
+      # die Dumper @post_data;
+    return $self->f_request(
+        [ 'sites', $uuid ],
+        {
+            req_type  => 'put',
+            post_data => [\%param]
+        }
+    );
 }
+
 
 sub publish {
     my ( $self, $param ) = @_;
