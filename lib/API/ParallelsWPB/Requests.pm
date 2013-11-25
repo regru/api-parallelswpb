@@ -4,7 +4,6 @@ use strict;
 use warnings;
 
 use Carp;
-use JSON;
 
 use base  qw/ API::ParallelsWPB /;
 
@@ -12,6 +11,7 @@ our $VERSION = '0.01';
 
 use constant {
     DEFAULT_CREATE_SITE_STATE   => 'trial',
+    DEFAULT_SESSIONLIFETIME     => '1800',
 };
 
 =head1 METHODS
@@ -77,16 +77,16 @@ sub gen_token {
     my ( $self, %param ) = @_;
 
     $param{localeCode} ||= 'en_US';
-    $param{sessionLifeTime} ||= '1800';
+    $param{sessionLifeTime} ||= DEFAULT_SESSIONLIFETIME;
 
     my $siteuuid = $self->_check_siteuuid( %param );
 
     return $self->f_request( [ 'sites', $siteuuid, 'token' ], {
         req_type  => 'post',
-        post_data => [
-            { localeCode => $param{localecode} },
-            { sessionLifeTime => $param{sessionlifetime} },
-        ],
+        post_data => [ {
+            localeCode => $param{localeCode},
+            sessionLifeTime => $param{sessionLifeTime},
+        } ],
     });
 }
 
