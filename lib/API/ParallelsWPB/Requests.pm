@@ -62,12 +62,12 @@ sub create_site {
         post_data => \@post_array,
     });
 
-    my $siteuuid = $res->response;
-    if ( $siteuuid ) {
-        $self->{siteuuid} = $siteuuid;
+    my $uuid = $res->response;
+    if ( $uuid ) {
+        $self->{uuid} = $uuid;
     }
     else {
-        carp "parameter siteuuid not found";
+        carp "parameter uuid not found";
     }
 
     return $res;
@@ -79,9 +79,9 @@ sub gen_token {
     $param{localeCode} ||= 'en_US';
     $param{sessionLifeTime} ||= DEFAULT_SESSIONLIFETIME;
 
-    my $siteuuid = $self->_check_siteuuid( %param );
+    my $uuid = $self->_check_uuid( %param );
 
-    return $self->f_request( [ 'sites', $siteuuid, 'token' ], {
+    return $self->f_request( [ 'sites', $uuid, 'token' ], {
         req_type  => 'post',
         post_data => [ {
             localeCode => $param{localeCode},
@@ -99,9 +99,9 @@ sub deploy {
 sub get_site_info {
     my ( $self, %param ) = @_;
 
-    my $siteuuid = $self->_check_siteuuid( %param );
+    my $uuid = $self->_check_uuid( %param );
 
-    return $self->f_request( [ 'sites', $siteuuid ], { req_type => 'get' } );
+    return $self->f_request( [ 'sites', $uuid ], { req_type => 'get' } );
 }
 
 sub get_sites_info {
@@ -125,9 +125,9 @@ sub publish {
 sub delete_site {
     my ( $self, %param ) = @_;
 
-    my $siteuuid = $self->_check_siteuuid( %param );
+    my $uuid = $self->_check_uuid( %param );
 
-    return $self->f_request( [ 'sites', $siteuuid ], { req_type => 'delete' } );
+    return $self->f_request( [ 'sites', $uuid ], { req_type => 'delete' } );
 }
 
 sub get_promo_footer {
@@ -139,9 +139,9 @@ sub get_promo_footer {
 sub get_site_custom_variable {
     my ( $self, %param ) = @_;
 
-    my $siteuuid = $self->_check_siteuuid( %param );
+    my $uuid = $self->_check_uuid( %param );
 
-    return $self->f_request( [ 'sites', $siteuuid, 'custom-properties' ], { req_type => 'get' } );
+    return $self->f_request( [ 'sites', $uuid, 'custom-properties' ], { req_type => 'get' } );
 }
 
 sub set_site_custom_variable {
@@ -183,9 +183,9 @@ sub change_promo_footer {
 sub set_site_promo_footer_visible {
     my ( $self, %param ) = @_;
 
-    my $siteuuid = $self->_check_siteuuid( %param );
+    my $uuid = $self->_check_uuid( %param );
 
-    return $self->f_request( [ 'sites', $siteuuid ], {
+    return $self->f_request( [ 'sites', $uuid ], {
             req_type  => 'put',
             post_data => [ { isPromoFooterVisible => 'true' } ],
     });
@@ -194,21 +194,21 @@ sub set_site_promo_footer_visible {
 sub set_site_promo_footer_invisible {
     my ( $self, %param ) = @_;
 
-    my $siteuuid = $self->_check_siteuuid( %param );
+    my $uuid = $self->_check_uuid( %param );
 
-    return $self->f_request( [ 'sites', $siteuuid ], {
+    return $self->f_request( [ 'sites', $uuid ], {
             req_type  => 'put',
             post_data => [ { isPromoFooterVisible => 'false' } ],
     });
 }
 
-sub _check_siteuuid {
+sub _check_uuid {
     my ( $self, %param ) = @_;
 
-    my $siteuuid = $param{siteuuid} ? $param{siteuuid} : $self->{siteuuid};
-    confess "Required parameter siteuuid!" unless ( $siteuuid );
+    my $uuid = $param{uuid} ? $param{uuid} : $self->{uuid};
+    confess "Required parameter uuid!" unless ( $uuid );
 
-    return $siteuuid;
+    return $uuid;
 }
 =back
 
