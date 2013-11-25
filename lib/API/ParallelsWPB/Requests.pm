@@ -10,6 +10,10 @@ use base  qw/ API::ParallelsWPB /;
 
 our $VERSION = '0.01';
 
+use constant {
+    DEFAULT_CREATE_SITE_STATE   => 'trial',
+};
+
 =head1 METHODS
 
 =over
@@ -33,22 +37,38 @@ Creating a site
 %param:
     state
     publicationSettings
-    ownerinfo
-    ispromofootervisible
+    ownerInfo
+    isPromoFooterVisible
 
 =cut
 
 sub create_site {
     my ( $self, %param ) = @_;
 
-    my @post_array;
-    for ( qw/ state publicationSettings ownerInfo isPromoFooterVisible /) {
-        push @post_array, { $_ => lc $param{$_} } if ( lc $param{$_} );
-    }
+    $param{state} ||= DEFAULT_CREATE_SITE_STATE;
+    $param{publicationSettings} ||= {};
+    $param{ownerInfo} ||= {};
+    $param{isPromoFooterVisible} ||= '';
+
+    my @post_array = (
+        { state => $param{state} },
+        { publicationSettings => $param{publicationSettings} },
+        { ownerInfo => $param{ownerInfo} },
+        { isPromoFooterVisible => $param{isPromoFooterVisible} }
+    );
+
     my $res = $self->f_request( [ 'sites' ], {
         req_type  => 'post',
         post_data => \@post_array,
     });
+
+    my $siteuuid = $res->response->{response};
+    if ( $siteuuid ) {
+        $self->{siteuuid} = $siteuuid;
+    }
+    else {
+        carp "parameter siteuuid not found";
+    }
 
     return $res;
 }
@@ -56,8 +76,8 @@ sub create_site {
 sub gen_token {
     my ( $self, %param ) = @_;
 
-    $param{localecode} ||= 'en_US';
-    $param{sessionlifetime} ||= '1800';
+    $param{localeCode} ||= 'en_US';
+    $param{sessionLifeTime} ||= '1800';
 
     my $siteuuid = $self->_check_siteuuid( %param );
 
