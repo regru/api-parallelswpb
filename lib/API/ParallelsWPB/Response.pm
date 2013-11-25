@@ -15,13 +15,13 @@ sub new {
     my $parsed_response = $json ? JSON::decode_json( $json ) : {};
 
     return bless(
-        $class,
         {
             success  => $success,
             json     => $json,
             error    => $error,
             response => $parsed_response
-        }
+        },
+        $class
     );
 }
 
@@ -42,6 +42,5 @@ sub response {
 
     return $self->{response};
 }
-
 
 1;
