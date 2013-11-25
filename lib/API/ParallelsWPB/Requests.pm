@@ -32,7 +32,7 @@ sub get_version {
     return $self->f_request( [qw/ system version /], { req_type => 'get' } );
 }
 
-=item B<create_site>( $self,$param )
+=item B<create_site>( $self,%param )
 
 Creating a site
 
@@ -78,21 +78,34 @@ sub create_site {
     return $res;
 }
 
+=item B<gen_token>( $self,%param )
+
+%param:
+    localeCode
+    sessionLifeTime
+
+=cut
+
 sub gen_token {
     my ( $self, %param ) = @_;
 
     $param{localeCode}      ||= DEFAULT_LOCALE_CODE;
     $param{sessionLifeTime} ||= DEFAULT_SESSIONLIFETIME;
 
-    my $uuid = $self->_check_uuid( %param );
+    my $uuid = $self->_get_uuid( %param );
 
-    return $self->f_request( [ 'sites', $uuid, 'token' ], {
-        req_type  => 'post',
-        post_data => [ {
-            localeCode => $param{localeCode},
-            sessionLifeTime => $param{sessionLifeTime},
-        } ],
-    });
+    return $self->f_request(
+        [ 'sites', $uuid, 'token' ],
+        {
+            req_type  => 'post',
+            post_data => [
+                {
+                    localeCode => $param{localeCode},
+                    sessionLifeTime => $param{sessionLifeTime},
+                } 
+            ],
+        }
+    );
 }
 
 =item B<deploy($self, %param)>
@@ -125,7 +138,7 @@ sub deploy {
 sub get_site_info {
     my ( $self, %param ) = @_;
 
-    my $uuid = $self->_check_uuid( %param );
+    my $uuid = $self->_get_uuid( %param );
 
     return $self->f_request( [ 'sites', $uuid ], { req_type => 'get' } );
 }
@@ -137,7 +150,7 @@ sub get_sites_info {
 }
 
 sub change_site_properties {
-    my ( $self, $param ) = @_;
+    my ( $self, %param ) = @_;
 
     return 1;
 }
@@ -151,7 +164,7 @@ sub publish {
 sub delete_site {
     my ( $self, %param ) = @_;
 
-    my $uuid = $self->_check_uuid( %param );
+    my $uuid = $self->_get_uuid( %param );
 
     return $self->f_request( [ 'sites', $uuid ], { req_type => 'delete' } );
 }
@@ -166,7 +179,7 @@ sub get_promo_footer {
 sub get_site_custom_variable {
     my ( $self, %param ) = @_;
 
-    my $uuid = $self->_check_uuid( %param );
+    my $uuid = $self->_get_uuid( %param );
 
     return $self->f_request( [ 'sites', $uuid, 'custom-properties' ], { req_type => 'get' } );
 }
@@ -212,7 +225,7 @@ sub change_promo_footer {
 sub set_site_promo_footer_visible {
     my ( $self, %param ) = @_;
 
-    my $uuid = $self->_check_uuid( %param );
+    my $uuid = $self->_get_uuid( %param );
 
     return $self->f_request( [ 'sites', $uuid ], {
             req_type  => 'put',
@@ -224,7 +237,7 @@ sub set_site_promo_footer_visible {
 sub set_site_promo_footer_invisible {
     my ( $self, %param ) = @_;
 
-    my $uuid = $self->_check_uuid( %param );
+    my $uuid = $self->_get_uuid( %param );
 
     return $self->f_request( [ 'sites', $uuid ], {
             req_type  => 'put',
@@ -233,7 +246,7 @@ sub set_site_promo_footer_invisible {
     );
 }
 
-sub _check_uuid {
+sub _get_uuid {
     my ( $self, %param ) = @_;
 
     my $uuid = $param{uuid} ? $param{uuid} : $self->{uuid};
