@@ -3,16 +3,9 @@ use strict;
 use warnings;
 use JSON;
 
-use Data::Dumper;
+our $VERSION = '0.01';
 
-use Moo;
-
-has json     => ( is => 'ro' );
-has success  => ( is => 'ro' );
-has error    => ( is => 'ro' );
-has response => ( is => 'ro' );
-
-sub BUILDARGS {
+sub new {
     my ( $class, $res ) = @_;
 
     my $success = $res->is_success;
@@ -20,12 +13,34 @@ sub BUILDARGS {
     my $error   = $success ? '' : $res->status_line;
 
     my $parsed_response = $json ? JSON::decode_json( $json ) : {};
-    return {
-        success  => $success,
-        json     => $json,
-        error    => $error,
-        response => $parsed_response
-    };
+
+    return bless(
+        {
+            success  => $success,
+            json     => $json,
+            error    => $error,
+            response => $parsed_response
+        },
+        $class
+    );
+}
+
+sub json {
+    my $self = shift;
+
+    return $self->{json};
+}
+
+sub success {
+    my $self = shift;
+
+    return $self->{success};
+}
+
+sub response {
+    my $self = shift;
+
+    return $self->{response};
 }
 
 1;
