@@ -7,6 +7,8 @@ use Carp;
 
 use base  qw/ API::ParallelsWPB /;
 
+our $VERSION = '0.01';
+
 # return version of Parallels Presence Builder
 sub get_version {
     my ( $self ) = @_;
@@ -35,6 +37,7 @@ sub deploy {
 sub get_site_info {
     my ( $self, $siteuuid ) = @_;
 
+    $siteuuid ||= $self->{siteuuid};
     confess "Required parameter siteuuid!" unless ( $siteuuid );
 
     return $self->f_request( [ 'sites', $siteuuid ], { req_type => 'get' } );
@@ -61,6 +64,7 @@ sub publish {
 sub delete_site {
     my ( $self, $siteuuid ) = @_;
 
+    $siteuuid ||= $self->{siteuuid};
     confess "Required parameter siteuuid!" unless ( $siteuuid );
 
     return $self->f_request( [ 'sites', $siteuuid ], { req_type => 'delete' } );
@@ -75,6 +79,7 @@ sub get_promo_footer {
 sub get_site_custom_variable {
     my ( $self, $siteuuid ) = @_;
 
+    $siteuuid ||= $self->{siteuuid};
     confess "Required parameter siteuuid!" unless ( $siteuuid );
 
     return $self->f_request( [ 'sites', $siteuuid, 'custom-properties' ], { req_type => 'get' } );
@@ -119,6 +124,7 @@ sub change_promo_footer {
 sub set_site_promo_footer_visible {
     my ( $self, $siteuuid ) = @_;
 
+    $siteuuid ||= $self->{siteuuid};
     confess "Required parameter siteuuid!" unless ( $siteuuid );
 
     return $self->f_request( [ 'sites', $siteuuid ], {
@@ -130,6 +136,7 @@ sub set_site_promo_footer_visible {
 sub set_site_promo_footer_invisible {
     my ( $self, $siteuuid ) = @_;
 
+    $siteuuid ||= $self->{siteuuid};
     confess "Required parameter siteuuid!" unless ( $siteuuid );
 
     return $self->f_request( [ 'sites', $siteuuid ], {
