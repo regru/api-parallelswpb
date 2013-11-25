@@ -19,7 +19,7 @@ sub new {
             success  => $success,
             json     => $json,
             error    => $error,
-            response => $parsed_response
+            response => $parsed_response->{ response }
         },
         $class
     );
