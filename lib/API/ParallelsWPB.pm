@@ -81,7 +81,7 @@ sub new {
 
 $data:
     req_type : HTTP request type: get, post, put, delete. GET by default.
-    post_data: data for POST request. Must be hashref or arrayref.
+    post_data: data for POST request. Must be hashref.
 
 =cut
 
@@ -151,6 +151,10 @@ sub _send_request {
 
 
 =back
+
+=head1 SEE ALSO
+
+L<Parallels Presence Builder Guide|http://download1.parallels.com/WPB/Doc/11.5/en-US/online/presence-builder-standalone-installation-administration-guide>
 
 =head1 AUTHORS
 

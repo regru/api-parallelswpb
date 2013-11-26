@@ -32,9 +32,7 @@ METHODS
         default. post_data: data for POST request. Must be hashref.
 
 SEE ALSO
-    Parallels Presence Builder Guide
-    <http://download1.parallels.com/WPB/Doc/11.5/en-US/online/presence-build
-    er-standalone-installation-administration-guide>
+    <a href="http://download1.parallels.com/WPB/Doc/11.5/en-US/online/presence-builder-standalone-installation-administration-guide">Parallels Presence Builder Guide</a>
 
 AUTHORS
     Alexander Ruzhnikov, "<a.ruzhnikov@reg.ru>"

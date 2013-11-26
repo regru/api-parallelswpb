@@ -3,6 +3,7 @@ LICENSE
 Makefile.PL
 MANIFEST
 README
+README.md
 lib/API/ParallelsWPB.pm
 lib/API/ParallelsWPB/Requests.pm
 lib/API/ParallelsWPB/Response.pm
