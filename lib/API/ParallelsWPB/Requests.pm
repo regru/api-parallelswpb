@@ -187,7 +187,7 @@ Changes site properties.
 sub change_site_properties {
     my ( $self, %param ) = @_;
 
-    my $uuid = $self->_check_uuid( %param );
+    my $uuid = $self->_get_uuid( %param );
     return $self->f_request(
         [ 'sites', $uuid ],
         {
@@ -200,13 +200,17 @@ sub change_site_properties {
 
 =item B<publish($self,%param)>
 
+Publish a site
+
+%param:
+    uuid
 
 =cut
 
 sub publish {
     my ( $self, %param ) = @_;
 
-    my $uuid = $self->_check_uuid( %param );
+    my $uuid = $self->_get_uuid( %param );
     return $self->f_request(
         [ 'sites', $uuid, 'publish' ],
         {
@@ -214,6 +218,16 @@ sub publish {
         }
     );
 }
+
+
+=item B<delete_site($self, %param)>
+
+Delete a site
+
+%param:
+    uuid
+
+=cut
 
 sub delete_site {
     my ( $self, %param ) = @_;

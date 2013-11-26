@@ -52,4 +52,9 @@ sub status {
     return $self->{status};
 }
 
+sub error {
+    my $self = shift;
+
+    return $self->{error};
+}
 1;
