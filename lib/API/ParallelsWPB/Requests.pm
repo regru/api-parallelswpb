@@ -5,8 +5,6 @@ use warnings;
 
 use Carp;
 
-use base qw/ API::ParallelsWPB /;
-
 our $VERSION = '0.01';
 
 use constant {
@@ -15,6 +13,12 @@ use constant {
     DEFAULT_CREATE_SITE_STATE => 'trial',
     DEFAULT_SESSIONLIFETIME   => '1800',
 };
+
+
+=head1 NAME
+
+API::ParallelsWPB::Requests
+
 
 =head1 METHODS
 
