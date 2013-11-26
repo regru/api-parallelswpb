@@ -1,0 +1,9 @@
+Changes
+LICENSE
+Makefile.PL
+MANIFEST
+README
+lib/API/ParallelsWPB.pm
+lib/API/ParallelsWPB/Requests.pm
+lib/API/ParallelsWPB/Response.pm
+t/01_load_modules.t
