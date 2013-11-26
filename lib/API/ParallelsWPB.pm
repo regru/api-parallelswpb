@@ -55,16 +55,8 @@ sub f_request {
     }
     $post_data ||= '{}';
 
-    # my ( $response, $error ) = $self->_send_request( $data, $url, $post_data );
     my $response = $self->_send_request($data, $url, $post_data);
     return $response;
-
-    # if ( wantarray ) {
-    #     return ( $response, $error )
-    # }
-    # else {
-    #     return $response ? $response : $error;
-    # }
 }
 
 sub _send_request {
@@ -99,7 +91,6 @@ sub _send_request {
 
     my $response = API::ParallelsWPB::Response->new($res);
     return $response;
-    # return $res->is_success() ? ($res->content(), '') : ('', $res->status_line);
 }
 
 1;

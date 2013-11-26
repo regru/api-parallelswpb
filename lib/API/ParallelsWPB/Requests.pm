@@ -161,6 +161,13 @@ sub get_sites_info {
 
 =item B<change_site_properties($self, %param)>
 
+Changes site properties.
+
+%param:
+    state
+    publicationSettings
+    ownerInfo
+    isPromoFooterVisible
 
 =cut
 
@@ -168,11 +175,6 @@ sub change_site_properties {
     my ( $self, %param ) = @_;
 
     my $uuid = $self->_check_uuid( %param );
-
-    # my @post_data = map { $_ => $param{$_} } grep { defined $param{$_}}
-    #   qw/state publicationSettings ownerInfo isPromoFooterVisible/;
-    use Data::Dumper;
-      # die Dumper @post_data;
     return $self->f_request(
         [ 'sites', $uuid ],
         {
@@ -183,10 +185,21 @@ sub change_site_properties {
 }
 
 
-sub publish {
-    my ( $self, $param ) = @_;
+=item B<publish($self,%param)>
 
-    return 1;
+
+=cut
+
+sub publish {
+    my ( $self, %param ) = @_;
+
+    my $uuid = $self->_check_uuid( %param );
+    return $self->f_request(
+        [ 'sites', $uuid, 'publish' ],
+        {
+            req_type  => 'post',
+        }
+    );
 }
 
 sub delete_site {
