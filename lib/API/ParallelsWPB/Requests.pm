@@ -5,8 +5,6 @@ use warnings;
 
 use Carp;
 
-use base qw/ API::ParallelsWPB /;
-
 our $VERSION = '0.01';
 
 use constant {
@@ -81,6 +79,7 @@ sub create_site {
 =item B<gen_token>( $self,%param )
 
 %param:
+    uuid
     localeCode
     sessionLifeTime
 

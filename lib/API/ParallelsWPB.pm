@@ -9,6 +9,8 @@ use JSON;
 use Carp;
 use API::ParallelsWPB::Response;
 
+use base qw/ API::ParallelsWPB::Requests /;
+
 our $VERSION = '0.01';
 
 # Constuctor
