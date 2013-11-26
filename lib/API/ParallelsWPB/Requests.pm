@@ -23,7 +23,7 @@ API::ParallelsWPB::Requests
 
 =over
 
-=item B<get_version>( $self )
+=item B<get_version($self)>
 
 return version of Parallels Presence Builder
 
@@ -35,11 +35,12 @@ sub get_version {
     return $self->f_request( [qw/ system version /], { req_type => 'get' } );
 }
 
-=item B<create_site>( $self,%param )
+=item B<create_site($self, %param)>
 
 Creating a site
 
 %param:
+
     state
     publicationSettings
     ownerInfo
@@ -81,9 +82,12 @@ sub create_site {
     return $res;
 }
 
-=item B<gen_token>( $self,%param )
+=item B<gen_token($self, %param)>
+
+Generating a Security Token for Accessing a Site
 
 %param:
+
     uuid
     localeCode
     sessionLifeTime
@@ -120,6 +124,7 @@ Creates site based on a specified topic.
       $client->deploy( localeCode => 'en_US', templateCode => 'music_blog' );
 
 %param:
+
     uuid
     localeCode
     templateCode
@@ -151,6 +156,7 @@ sub deploy {
 Returns site info.
 
 %param:
+
     uuid
 
 =cut
@@ -181,6 +187,7 @@ sub get_sites_info {
 Changes site properties.
 
 %param:
+
     state
     publicationSettings
     ownerInfo
@@ -207,6 +214,7 @@ sub change_site_properties {
 Publish a site
 
 %param:
+
     uuid
 
 =cut
@@ -229,6 +237,7 @@ sub publish {
 Delete a site
 
 %param:
+
     uuid
 
 =cut
@@ -248,7 +257,7 @@ sub get_promo_footer {
         { req_type => 'get' } );
 }
 
-=item B<get_site_custom_variable>($self, %param)
+=item B<get_site_custom_variable($self, %param)>
 
 Retrieving a List of Custom Variables for a Website
 
@@ -266,7 +275,7 @@ sub get_site_custom_variable {
     return $self->f_request( [ 'sites', $uuid, 'custom-properties' ], { req_type => 'get' } );
 }
 
-=item B<set_site_custom_variable>($self, %param)
+=item B<set_site_custom_variable($self, %param)>
 
 Setting a Custom Variable for a Website
 
@@ -294,7 +303,7 @@ sub set_site_custom_variable {
     );
 }
 
-=item B<get_sites_custom_variables>($self)
+=item B<get_sites_custom_variables($self)>
 
 Retrieving Custom Variables Defined for All Websites
 
@@ -307,7 +316,7 @@ sub get_sites_custom_variables {
         { req_type => 'get' } );
 }
 
-=item B<set_sites_custom_variables>($self, %param)
+=item B<set_sites_custom_variables($self, %param)>
 
 Setting Custom Variables for All Websites
 
@@ -331,7 +340,7 @@ sub set_sites_custom_variables {
     );
 }
 
-=item B<set_custom_trial_messages>($self, @param)
+=item B<set_custom_trial_messages($self, @param)>
 
 Setting Custom Messages for the Trial Mode
 
@@ -373,7 +382,7 @@ sub set_custom_trial_messages {
     );
 }
 
-=item B<get_custom_trial_messages>($self)
+=item B<get_custom_trial_messages($self)>
 
 Retrieving Custom Messages for the Trial Mode
 
@@ -386,7 +395,7 @@ sub get_custom_trial_messages {
         { req_type => 'get' } );
 }
 
-=item B<change_promo_footer>($self, %param)
+=item B<change_promo_footer($self, %param)>
 
 Changing the Default Content of the Promotional Footer
 
@@ -409,6 +418,16 @@ sub change_promo_footer {
     );
 }
 
+=item B<set_site_promo_footer_visible($self, %param)>
+
+Showing the Promotional Footer on Websites
+
+%param:
+
+    uuid
+
+=cut
+
 sub set_site_promo_footer_visible {
     my ( $self, %param ) = @_;
 
@@ -420,6 +439,16 @@ sub set_site_promo_footer_visible {
         }
     );
 }
+
+=item B<set_site_promo_footer_invisible($self, %param)>
+
+Removing the Promotional Footer from Websites
+
+%param:
+
+    uuid
+
+=cut
 
 sub set_site_promo_footer_invisible {
     my ( $self, %param ) = @_;
