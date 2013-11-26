@@ -5,7 +5,7 @@ use 5.008;
 
 use ExtUtils::MakeMaker;
 
-my %WriteMakefileArgs = (
+WriteMakefile(
     "ABSTRACT"  => "OO interface to the Parallels Presence Builder",
     "AUTHOR"    => "Alexnader Ruzhnikov <a.ruzhnikov\@reg.ru>, Polina Shubina <shubina\@reg.ru>",
     "BUILD_REQUIRES" => {},
