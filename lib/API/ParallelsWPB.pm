@@ -13,6 +13,45 @@ use base qw/ API::ParallelsWPB::Requests /;
 
 our $VERSION = '0.01';
 
+=head1 NAME
+
+API::ParallelsWPB - client for Parallels Presence Builder API
+
+=head1 SYNOPSYS
+
+    my $client = API::ParallelsWPB->new(username => 'admin', password => 'passw0rd', server => 'builder.server.mysite.ru');
+    my $response = $client->get_sites_info;
+    if ($response->success) {
+        for my $site (@{$response->response}) {
+            say "UUID: ". $site->{ uuid };
+        }
+    }
+    else {
+        warn "Error occured: " . $response->error . ", Status: " . $response->status;
+    }
+
+
+=head1 METHODS
+
+=over 
+
+=item B<new($class, %param)>
+
+Creates new client instance. 
+
+Required parameters:
+    username
+    password
+    server
+
+Optional parameters:
+
+    api_version - API version, used in API url constructing.
+    debug - debug flag, requests will be loogged to stderr
+    timeout - connection timeout
+
+=cut
+
 # Constuctor
 sub new {
     my $class = shift;
@@ -35,6 +74,18 @@ sub new {
 }
 
 # "free" request. Basic method for requests
+
+=item B<f_request($self, $url_array_ref, $data)>
+
+"Free" request. Now for internal usage only.
+
+$data:
+    req_type : HTTP request type: get, post, put, delete. GET by default.
+    post_data: data for POST request. Must be hashref or arrayref.
+
+=cut
+
+
 sub f_request {
     my ( $self, $url_array, $data ) = @_;
 
@@ -95,4 +146,22 @@ sub _send_request {
     return $response;
 }
 
+
 1;
+
+
+=back
+
+=head1 AUTHORS
+
+Alexander Ruzhnikov, C<< <a.ruzhnikov@reg.ru> >>
+
+Polina Shubina, C<< <shubina@reg.ru> >>
+
+=head1 LICENSE AND COPYRIGHT
+
+This software is copyright (c) 2013 by REG.RU LLC.
+
+This is free software; you can redistribute it and/or modify it under the same terms as the Perl 5 programming language system itself.
+
+=cut

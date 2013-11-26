@@ -14,6 +14,11 @@ use constant {
     DEFAULT_SESSIONLIFETIME   => '1800',
 };
 
+
+=head1 NAME
+
+API::ParallelsWPB::Requests
+
 =head1 METHODS
 
 =over
