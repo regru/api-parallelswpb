@@ -9,9 +9,35 @@ use JSON;
 use Carp;
 use API::ParallelsWPB::Response;
 
-use base qw/API::ParallelsWPB::Requests/;
+use base qw/ API::ParallelsWPB::Requests /;
 
 our $VERSION = '0.01';
+
+=head1 NAME
+
+API::ParallelsWPB - client for Parallels Presence Builder API
+
+=head1 METHODS
+
+
+=over 
+
+=item B<new($class, %param)>
+
+Creates new client instance. 
+
+Required parameters:
+    username
+    password
+    server
+
+Optional parameters:
+
+    api_version - API version, used in API url constructing.
+    debug - debug flag, requests will be loogged to stderr
+    timeout - connection timeout
+
+=cut
 
 # Constuctor
 sub new {
@@ -35,6 +61,18 @@ sub new {
 }
 
 # "free" request. Basic method for requests
+
+=item B<f_request($self, $url_array_ref, $data)>
+
+"Free" request. Now for internal usage only.
+
+$data:
+    req_type : HTTP request type: get, post, put, delete. GET by default.
+    post_data: data for POST request. Must be hashref or arrayref.
+
+=cut
+
+
 sub f_request {
     my ( $self, $url_array, $data ) = @_;
 
@@ -95,4 +133,10 @@ sub _send_request {
     return $response;
 }
 
+
 1;
+
+
+=back
+
+=cut

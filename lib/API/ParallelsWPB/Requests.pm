@@ -19,7 +19,6 @@ use constant {
 
 API::ParallelsWPB::Requests
 
-
 =head1 METHODS
 
 =over
@@ -85,6 +84,7 @@ sub create_site {
 =item B<gen_token>( $self,%param )
 
 %param:
+    uuid
     localeCode
     sessionLifeTime
 
