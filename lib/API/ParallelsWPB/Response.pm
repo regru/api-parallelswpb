@@ -31,7 +31,7 @@ sub new {
     my $status     = $res->status_line;
 
     my $parsed_response = $json       ? JSON::decode_json( $json )       : {};
-    my $parsed_error    = $error_json ? JSON::decode_json( $error_json ) : {};
+    my $parsed_error    = $error_json ? eval { JSON::decode_json( $error_json )} : {};
 
     return bless(
         {

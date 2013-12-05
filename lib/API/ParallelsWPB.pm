@@ -125,22 +125,12 @@ sub _send_request {
 
     $req->authorization_basic( $self->{username}, $self->{password} );
     $ua->ssl_opts(verify_hostname => 0);
+    $ua->timeout($self->{ timeout });
 
     warn $req->as_string if ( $self->{debug} );
 
-    # TODO: $ua->timeout 
-    my $res = eval {
-        local $SIG{ALRM} = sub { die "connection timeout" };
-        alarm $self->{timeout};
-        $ua->request($req);
-    };
-    alarm 0;
-
+    my $res = $ua->request($req);
     warn $res->as_string if ( $self->{debug} );
-
-    if ( !$res || $@ || ref $res && $res->status_line =~ /connection timeout/ ) {
-        return ('', 'connection timeout')
-    }
 
     my $response = API::ParallelsWPB::Response->new($res);
     return $response;
