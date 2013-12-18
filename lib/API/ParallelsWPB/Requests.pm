@@ -41,6 +41,7 @@ Creating a site
 
 %param:
 
+    uuid
     state
     publicationSettings
     ownerInfo
@@ -56,18 +57,18 @@ sub create_site {
     $param{ownerInfo}            ||= {};
     $param{isPromoFooterVisible} ||= '';
 
-    my @post_array = (
-        { state                => $param{state} },
-        { publicationSettings  => $param{publicationSettings} },
-        { ownerInfo            => $param{ownerInfo} },
-        { isPromoFooterVisible => $param{isPromoFooterVisible} }
-    );
+    my $post_array = [ {
+        state                => $param{state},
+        publicationSettings  => $param{publicationSettings},
+        ownerInfo            => $param{ownerInfo},
+        isPromoFooterVisible => $param{isPromoFooterVisible}
+    } ];
 
     my $res = $self->f_request(
         ['sites'],
         {
             req_type  => 'post',
-            post_data => \@post_array,
+            post_data => $post_array,
         }
     );
 
