@@ -486,6 +486,14 @@ sub set_limits {
     );
 }
 
+
+sub configure_buy_and_publish_dialog {
+    my ( $self, $params ) = @_;
+
+    return $self->f_request(['system', 'trial-mode', 'messages'], {req_type => 'put', post_data => [ $params ]});
+
+}
+
 sub _get_uuid {
     my ( $self, %param ) = @_;
 
