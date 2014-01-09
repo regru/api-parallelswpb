@@ -463,6 +463,29 @@ sub set_site_promo_footer_invisible {
     );
 }
 
+
+=item B<set_limits>
+
+Set limitations for single site
+    
+%param: 
+    
+    uuid
+
+=cut
+
+sub set_limits {
+    my ( $self, %param ) = @_;
+
+    my $uuid = $self->_get_uuid( %param );
+
+    return $self->f_request( [ 'sites', $uuid, 'limits' ], {
+            req_type  => 'put',
+            post_data => [ \%param ],
+        }
+    );
+}
+
 sub _get_uuid {
     my ( $self, %param ) = @_;
 
