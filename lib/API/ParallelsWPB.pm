@@ -11,7 +11,10 @@ use API::ParallelsWPB::Response;
 
 use base qw/ API::ParallelsWPB::Requests /;
 
-our $VERSION = '0.01';
+# ABSTRACT:  client for Parallels Presence Builder API
+
+# VERSION
+# AUTHORITY
 
 =head1 NAME
 
@@ -37,7 +40,7 @@ API::ParallelsWPB - client for Parallels Presence Builder API
 
 =item B<new($class, %param)>
 
-Creates new client instance. 
+Creates new client instance.
 
 Required parameters:
     username

@@ -3,8 +3,10 @@ use strict;
 use warnings;
 use JSON;
 
-our $VERSION = '0.01';
+# ABSTRACT: processing of API responses
 
+# VERSION
+# AUTHORITY
 
 =head1 NAME
 
@@ -16,7 +18,7 @@ API::ParallelsWPB::Response
 
 =item B<new($class, $res)>
 
-Creates new API::ParallelsWPB::Response object. 
+Creates new API::ParallelsWPB::Response object.
 
 $res - HTTP::Response object.
 

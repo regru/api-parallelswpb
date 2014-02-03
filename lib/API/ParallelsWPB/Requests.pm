@@ -5,7 +5,6 @@ use warnings;
 
 use Carp;
 
-our $VERSION = '0.01';
 
 use constant {
     DEFAULT_LOCALE_CODE       => 'en_US',
@@ -14,6 +13,10 @@ use constant {
     DEFAULT_SESSIONLIFETIME   => '1800',
 };
 
+# ABSTRACT: processing of API requests
+
+# VERSION
+# AUTHORITY
 
 =head1 NAME
 
@@ -111,8 +114,7 @@ sub gen_token {
                 {
                     localeCode => $param{localeCode},
                     sessionLifeTime => $param{sessionLifeTime},
-                } 
-            ],
+                } ],
         }
     );
 }
@@ -468,8 +470,8 @@ sub set_site_promo_footer_invisible {
 
 Set limitations for single site
     
-%param: 
-    
+%param:
+
     uuid
 
 =cut
