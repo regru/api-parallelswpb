@@ -237,7 +237,7 @@ sub publish {
 
 =item B<delete_site($self, %param)>
 
-Delete a site
+Delete a site.
 
 %param:
 
@@ -252,6 +252,13 @@ sub delete_site {
 
     return $self->f_request( [ 'sites', $uuid ], { req_type => 'delete' } );
 }
+
+
+=item B<get_promo_footer>
+
+Show footer for promo.
+
+=cut
 
 sub get_promo_footer {
     my ( $self ) = @_;
@@ -488,6 +495,36 @@ sub set_limits {
     );
 }
 
+=item B<configure_buy_and_publish_dialog>
+
+Configuration for Buy & Publish dialog box in constructor.
+
+$params:
+
+    [
+        {
+            "localeCode" => "de_DE",
+
+            "messages" => {
+
+                "upsellDialogTitle" => $title,
+                "upsellDialogMsg"   => $html
+
+            }
+        },
+        {
+            "localeCode" => "ru_RU",
+
+            "messages" => {
+
+                "upsellDialogTitle" => $title,
+                "upsellDialogMsg"   => $html
+
+            }
+        }
+    ]
+
+=cut
 
 sub configure_buy_and_publish_dialog {
     my ( $self, $params ) = @_;
@@ -506,6 +543,14 @@ sub _get_uuid {
 }
 
 =back
+
+=head1 SEE ALSO
+
+L<Parallels Presence Builder Guide|http://download1.parallels.com/WPB/Doc/11.5/en-US/online/presence-builder-standalone-installation-administration-guide>
+
+L<API::ParallelsWPB>
+
+L<API::ParallelsWPB::Response>
 
 =cut
 

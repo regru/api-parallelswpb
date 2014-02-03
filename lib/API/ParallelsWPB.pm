@@ -16,10 +16,6 @@ use base qw/ API::ParallelsWPB::Requests /;
 # VERSION
 # AUTHORITY
 
-=head1 NAME
-
-API::ParallelsWPB - client for Parallels Presence Builder API
-
 =head1 SYNOPSYS
 
     my $client = API::ParallelsWPB->new(username => 'admin', password => 'passw0rd', server => 'builder.server.mysite.ru');
@@ -149,16 +145,8 @@ sub _send_request {
 
 L<Parallels Presence Builder Guide|http://download1.parallels.com/WPB/Doc/11.5/en-US/online/presence-builder-standalone-installation-administration-guide>
 
-=head1 AUTHORS
+L<API::ParallelsWPB::Response>
 
-Alexander Ruzhnikov, C<< <a.ruzhnikov@reg.ru> >>
-
-Polina Shubina, C<< <shubina@reg.ru> >>
-
-=head1 LICENSE AND COPYRIGHT
-
-This software is copyright (c) 2013 by REG.RU LLC.
-
-This is free software; you can redistribute it and/or modify it under the same terms as the Perl 5 programming language system itself.
+L<API::ParallelsWPB::Requests>
 
 =cut
