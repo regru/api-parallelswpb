@@ -18,11 +18,11 @@ use base qw/ API::ParallelsWPB::Requests /;
 
 =head1 SYNOPSYS
 
-    my $client = API::ParallelsWPB->new(username => 'admin', password => 'passw0rd', server => 'builder.server.mysite.ru');
+    my $client = API::ParallelsWPB->new( username => 'admin', password => 'passw0rd', server => 'builder.server.mysite.ru' );
     my $response = $client->get_sites_info;
-    if ($response->success) {
-        for my $site (@{$response->response}) {
-            say "UUID: ". $site->{ uuid };
+    if ( $response->success ) {
+        for my $site ( @{ $response->response } ) {
+            say "UUID: ". $site->{uuid};
         }
     }
     else {
