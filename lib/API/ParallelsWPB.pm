@@ -118,20 +118,20 @@ sub _send_request {
     my $req = HTTP::Request->new( $data->{req_type} => $url );
 
     if ( $data->{req_type} eq 'POST' || $data->{req_type} eq 'PUT' ) {
-        $req->header('content-type' => 'application/json');
-        $req->content($post_data);
+        $req->header( 'content-type' => 'application/json' );
+        $req->content( $post_data );
     }
 
     $req->authorization_basic( $self->{username}, $self->{password} );
-    $ua->ssl_opts(verify_hostname => 0);
-    $ua->timeout($self->{ timeout });
+    $ua->ssl_opts( verify_hostname => 0 );
+    $ua->timeout( $self->{timeout} );
 
     warn $req->as_string if ( $self->{debug} );
 
-    my $res = $ua->request($req);
+    my $res = $ua->request( $req );
     warn $res->as_string if ( $self->{debug} );
 
-    my $response = API::ParallelsWPB::Response->new($res);
+    my $response = API::ParallelsWPB::Response->new( $res );
     return $response;
 }
 
