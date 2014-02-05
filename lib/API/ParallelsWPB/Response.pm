@@ -3,8 +3,10 @@ use strict;
 use warnings;
 use JSON;
 
-our $VERSION = '0.01';
+# ABSTRACT: processing of API responses
 
+# VERSION
+# AUTHORITY
 
 =head1 NAME
 
@@ -14,9 +16,9 @@ API::ParallelsWPB::Response
 
 =over
 
-=item B<new($class, $res)>
+=item B<new( $class, $res )>
 
-Creates new API::ParallelsWPB::Response object. 
+Creates new API::ParallelsWPB::Response object.
 
 $res - HTTP::Response object.
 
@@ -46,7 +48,7 @@ sub new {
 }
 
 
-=item B<json($self)>
+=item B<json( $self )>
 
 Returns original JSON answer.
 
@@ -58,7 +60,7 @@ sub json {
     return $self->{json};
 }
 
-=item B<success($self)>
+=item B<success( $self )>
 
 Returns 1 if request succeeded, 0 otherwise.
 
@@ -70,7 +72,7 @@ sub success {
     return $self->{success};
 }
 
-=item B<respons($self)>
+=item B<response( $self )>
 
 Returns munged response from service. According to method, it can be scalar, hashref of arrayref.
 
@@ -82,9 +84,9 @@ sub response {
     return $self->{response};
 }
 
-=item B<status($self)>
+=item B<status( $self )>
 
-Returns response status line
+Returns response status line.
 
 =cut
 
@@ -95,7 +97,7 @@ sub status {
 }
 
 
-=item B<error($self)>
+=item B<error( $self )>
 
 Returns munged error text.
 
@@ -107,10 +109,17 @@ sub error {
     return $self->{error};
 }
 
-
 1;
 
 
 =back
+
+=head1 SEE ALSO
+
+L<Parallels Presence Builder Guide|http://download1.parallels.com/WPB/Doc/11.5/en-US/online/presence-builder-standalone-installation-administration-guide>
+
+L<API::ParallelsWPB>
+
+L<API::ParallelsWPB::Requests>
 
 =cut
