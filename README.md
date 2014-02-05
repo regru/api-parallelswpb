@@ -2,7 +2,7 @@
 
 API::ParallelsWPB - client for Parallels Presence Builder API
 
-# SYNOPSYS
+# SYNOPSIS
 
 ```perl
 my $client = API::ParallelsWPB->new(username => 'admin', password => 'passw0rd', server => 'builder.server.mysite.ru');
