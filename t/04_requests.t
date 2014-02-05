@@ -8,7 +8,6 @@ use Data::Dumper;
 use API::ParallelsWPB;
 use API::ParallelsWPB::Response;
 
-use lib::abs '..';
 use t::lib::Mock;
 
 my $client = t::lib::Mock->new(
@@ -79,7 +78,6 @@ subtest 'deploy' => sub {
     like( $p->{post_data}, qr{"generic","en_US","Tiitle"}, 'post_data for deploy is ok' );
 
     is( $p->{data}->{req_type}, 'POST', 'Reqtype for deploy is ok' );
-
 };
 
 # /api/5.3/sites/{site_uuid}/
