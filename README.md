@@ -4,35 +4,18 @@ API::ParallelsWPB - client for Parallels Presence Builder API
 
 # SYNOPSYS
 
-        my $client = API::ParallelsWPB->new(username => 'admin', password => 'passw0rd', server => 'builder.server.mysite.ru');
-        my $response = $client->get_sites_info;
-        if ($response->success) {
-            for my $site (@{$response->response}) {
-                say "UUID: ". $site->{ uuid };
-            }
-        }
-        else {
-            warn "Error occured: " . $response->error . ", Status: " . $response->status;
-        }
-
-# METHODS
-
-    new($class, %param)
-        Creates new client instance.
-
-        Required parameters: username password server
-
-        Optional parameters:
-
-            api_version - API version, used in API url constructing.
-            debug - debug flag, requests will be loogged to stderr
-            timeout - connection timeout
-
-    f_request($self, $url_array_ref, $data)
-        "Free" request. Now for internal usage only.
-
-        $data: req_type : HTTP request type: get, post, put, delete. GET by
-        default. post_data: data for POST request. Must be hashref.
+```perl
+my $client = API::ParallelsWPB->new(username => 'admin', password => 'passw0rd', server => 'builder.server.mysite.ru');
+my $response = $client->get_sites_info;
+if ($response->success) {
+    for my $site (@{$response->response}) {
+        say "UUID: ". $site->{ uuid };
+    }
+}
+else {
+    warn "Error occured: " . $response->error . ", Status: " . $response->status;
+}
+```
 
 # SEE ALSO
    
