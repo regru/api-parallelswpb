@@ -8,15 +8,7 @@ use JSON;
 # VERSION
 # AUTHORITY
 
-=head1 NAME
-
-API::ParallelsWPB::Response
-
-=head1 METHODS
-
-=over
-
-=item B<new( $class, $res )>
+=method B<new($class, $res)>
 
 Creates new API::ParallelsWPB::Response object.
 
@@ -48,7 +40,7 @@ sub new {
 }
 
 
-=item B<json( $self )>
+=method B<json($self)>
 
 Returns original JSON answer.
 
@@ -60,7 +52,7 @@ sub json {
     return $self->{json};
 }
 
-=item B<success( $self )>
+=method B<success($self)>
 
 Returns 1 if request succeeded, 0 otherwise.
 
@@ -72,7 +64,7 @@ sub success {
     return $self->{success};
 }
 
-=item B<response( $self )>
+=method B<response($self)>
 
 Returns munged response from service. According to method, it can be scalar, hashref of arrayref.
 
@@ -84,7 +76,7 @@ sub response {
     return $self->{response};
 }
 
-=item B<status( $self )>
+=method B<status($self)>
 
 Returns response status line.
 
@@ -97,7 +89,7 @@ sub status {
 }
 
 
-=item B<error( $self )>
+=method B<error($self)>
 
 Returns munged error text.
 
@@ -111,8 +103,6 @@ sub error {
 
 1;
 
-
-=back
 
 =head1 SEE ALSO
 

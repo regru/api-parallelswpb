@@ -16,7 +16,7 @@ use base qw/ API::ParallelsWPB::Requests /;
 # VERSION
 # AUTHORITY
 
-=head1 SYNOPSYS
+=head1 SYNOPSIS
 
     my $client = API::ParallelsWPB->new( username => 'admin', password => 'passw0rd', server => 'builder.server.mysite.ru' );
     my $response = $client->get_sites_info;
@@ -29,25 +29,37 @@ use base qw/ API::ParallelsWPB::Requests /;
         warn "Error occured: " . $response->error . ", Status: " . $response->status;
     }
 
+=method B<new($class, %param)>
 
-=head1 METHODS
+Creates new client instance. Parameters for C<new> are:
 
-=over 
+=over
 
-=item B<new($class, %param)>
+=item username
 
-Creates new client instance.
+Username for connection to Parallels WebPresence Builder instance. Required parameter.
 
-Required parameters:
-    username
-    password
-    server
+=item password
 
-Optional parameters:
+Password for connection to Parallels WebPresence Builder instance. Required parameter.
 
-    api_version - API version, used in API url constructing.
-    debug - debug flag, requests will be loogged to stderr
-    timeout - connection timeout
+=item server
+
+Servername or server ip address for connection to Parallels WebPresence Builder instance. Optional parameter.
+
+=item api_version
+
+API version, used in API url constructing. Optional parameter.
+
+=item debug
+
+Debug flag, requests will be loogged to stderr. Optional parameter.
+
+=item timeout
+
+Connection timeout. Optional parameter.
+
+=back
 
 =cut
 
@@ -74,7 +86,7 @@ sub new {
 
 # "free" request. Basic method for requests
 
-=item B<f_request($self, $url_array_ref, $data)>
+=method B<f_request($self, $url_array_ref, $data)>
 
 "Free" request. Now for internal usage only.
 
@@ -138,8 +150,6 @@ sub _send_request {
 
 1;
 
-
-=back
 
 =head1 SEE ALSO
 

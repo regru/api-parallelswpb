@@ -22,13 +22,9 @@ use constant {
 
 API::ParallelsWPB::Requests
 
-=head1 METHODS
+=method B<get_version($self)>
 
-=over
-
-=item B<get_version($self)>
-
-Getring the current version of the Parallels Web Presence Builder instance on the defined server.
+Getting the current version of the Parallels Web Presence Builder instance on the defined server.
 
 =cut
 
@@ -38,7 +34,7 @@ sub get_version {
     return $self->f_request( [qw/ system version /], { req_type => 'get' } );
 }
 
-=item B<create_site($self, %param)>
+=method B<create_site($self, %param)>
 
 Creating a site.
 
@@ -125,7 +121,7 @@ sub create_site {
     return $res;
 }
 
-=item B<gen_token($self, %param)>
+=method B<gen_token($self, %param)>
 
 Generating a Security Token for Accessing a Site
 
@@ -189,7 +185,7 @@ sub gen_token {
     );
 }
 
-=item B<deploy($self, %param)>
+=method B<deploy($self, %param)>
 
 Creates site based on a specified topic.
 
@@ -237,7 +233,7 @@ sub deploy {
 }
 
 
-=item B<get_site_info($self, %param)>
+=method B<get_site_info($self, %param)>
 
 Retrieving information about a specific site.
 
@@ -260,7 +256,7 @@ sub get_site_info {
 }
 
 
-=item B<get_sites_info($self)>
+=method B<get_sites_info($self)>
 
 Retrieving information about all sites.
 
@@ -276,7 +272,7 @@ sub get_sites_info {
     return $self->f_request( [qw/ sites /], { req_type => 'get' } );
 }
 
-=item B<change_site_properties($self, %param)>
+=method B<change_site_properties($self, %param)>
 
 Changes site properties.
 
@@ -320,7 +316,7 @@ sub change_site_properties {
 }
 
 
-=item B<publish($self,%param)>
+=method B<publish($self,%param)>
 
 Publish a site.
 
@@ -347,7 +343,7 @@ sub publish {
 }
 
 
-=item B<delete_site($self, %param)>
+=method B<delete_site($self, %param)>
 
 Deleting a site.
 
@@ -370,7 +366,7 @@ sub delete_site {
 }
 
 
-=item B<get_promo_footer( $self )>
+=method B<get_promo_footer( $self )>
 
 Retrieving the current content of the promotional footer.
 
@@ -385,7 +381,7 @@ sub get_promo_footer {
         { req_type => 'get' } );
 }
 
-=item B<get_site_custom_variable($self, %param)>
+=method B<get_site_custom_variable($self, %param)>
 
 Retrieving a List of Custom Variables for a Website.
 
@@ -409,7 +405,7 @@ sub get_site_custom_variable {
     return $self->f_request( [ 'sites', $uuid, 'custom-properties' ], { req_type => 'get' } );
 }
 
-=item B<set_site_custom_variable($self, %param)>
+=method B<set_site_custom_variable($self, %param)>
 
 Setting a Custom Variable for a Website
 
@@ -442,7 +438,7 @@ sub set_site_custom_variable {
     );
 }
 
-=item B<get_sites_custom_variables($self)>
+=method B<get_sites_custom_variables($self)>
 
 Retrieving Custom Variables Defined for All Websites
 
@@ -460,7 +456,7 @@ sub get_sites_custom_variables {
         { req_type => 'get' } );
 }
 
-=item B<set_sites_custom_variables($self, %param)>
+=method B<set_sites_custom_variables($self, %param)>
 
 Setting Custom Variables for All Websites
 
@@ -489,7 +485,7 @@ sub set_sites_custom_variables {
     );
 }
 
-=item B<set_custom_trial_messages($self, @param)>
+=method B<set_custom_trial_messages($self, @param)>
 
 Setting Custom Messages for the Trial Mode
 
@@ -532,7 +528,7 @@ sub set_custom_trial_messages {
     );
 }
 
-=item B<get_custom_trial_messages($self)>
+=method B<get_custom_trial_messages($self)>
 
 Retrieving Custom Messages for the Trial Mode
 
@@ -545,7 +541,7 @@ sub get_custom_trial_messages {
         { req_type => 'get' } );
 }
 
-=item B<change_promo_footer($self, %param)>
+=method B<change_promo_footer($self, %param)>
 
 Changing the Default Content of the Promotional Footer
 
@@ -568,7 +564,7 @@ sub change_promo_footer {
     );
 }
 
-=item B<set_site_promo_footer_visible($self, %param)>
+=method B<set_site_promo_footer_visible($self, %param)>
 
 Showing the Promotional Footer on Websites
 
@@ -590,7 +586,7 @@ sub set_site_promo_footer_visible {
     );
 }
 
-=item B<set_site_promo_footer_invisible($self, %param)>
+=method B<set_site_promo_footer_invisible($self, %param)>
 
 Removing the Promotional Footer from Websites
 
@@ -613,7 +609,7 @@ sub set_site_promo_footer_invisible {
 }
 
 
-=item B<set_limits>
+=method B<set_limits>
 
 Set limitations for single site
     
@@ -706,7 +702,7 @@ sub set_limits {
     );
 }
 
-=item B<configure_buy_and_publish_dialog>
+=method B<configure_buy_and_publish_dialog>
 
 Configuration for Buy & Publish dialog box in constructor.
 
@@ -754,8 +750,6 @@ sub _get_uuid {
 
     return $uuid;
 }
-
-=back
 
 =head1 SEE ALSO
 
