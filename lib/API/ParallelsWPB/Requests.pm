@@ -223,7 +223,7 @@ sub deploy {
 
     $param{localeCode}   ||= $self->DEFAULT_LOCALE_CODE;
     $param{templateCode} ||= $self->DEFAULT_TEMPLATE_CODE;
-    my $siteuuid = $self->_check_uuid( %param );
+    my $siteuuid = $self->_get_uuid( %param );
 
     my @post_data = map { $param{$_} } qw/templateCode localeCode title/;
 
