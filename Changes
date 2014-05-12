@@ -1,4 +1,13 @@
 Revision history for Perl extension API::ParallelsWPB
 
+{{$NEXT}}
+
+    [ FEATURES ]
+    - fixed utf8 flag in request
+
+    [ TESTS ]
+    - updated tests
+
+
 0.01    Tue Nov 26 12:22:16 2013
         - first release;

@@ -3,10 +3,11 @@
 use strict;
 use warnings;
 
-use Test::More tests => 3;
+use Test::More tests => 5;
 use Data::Dumper;
 use API::ParallelsWPB;
 use API::ParallelsWPB::Response;
+use utf8;
 
 my %transfered_params = ();
 
@@ -116,5 +117,56 @@ subtest 'Test POST request with uuid' => sub {
             ]
         },
         'Request type with uuid is POST'
+    );
+};
+
+
+subtest 'Test unicode chars' => sub {
+    plan tests => 1;
+
+    $client->f_request(
+        [ 'sites', '123' ],
+        {
+            req_type  => 'put',
+            post_data => [
+                {
+                    ownerInfo => {
+                        personalName => 'Василиус Пупкинус'
+                    }
+                }
+            ],
+        }
+    );
+
+    like(
+        $transfered_params{post_data},
+        qr/Василиус Пупкинус/,
+        'Unicode char is ok in request'
+    );
+};
+
+
+subtest 'Test utf-8' => sub {
+    no utf8;
+    plan tests => 1;
+
+    $client->f_request(
+        [ 'sites', '123' ],
+        {
+            req_type  => 'put',
+            post_data => [
+                {
+                    ownerInfo => {
+                        personalName => 'Василиус Пупкинус'
+                    }
+                }
+            ],
+        }
+    );
+
+    like(
+        $transfered_params{post_data},
+        qr/Василиус Пупкинус/,
+        'utf8 char is ok in request'
     );
 };

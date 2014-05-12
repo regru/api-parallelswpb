@@ -110,12 +110,13 @@ sub f_request {
     $url .= join( '/', @{ $url_array }) . '/';
 
     my $post_data;
+
     if ( $data->{req_type} eq 'POST' || $data->{req_type} eq 'PUT' ) {
         $data->{post_data} ||= {};
         unless ( ref $data->{post_data} eq 'HASH' || ref $data->{post_data} eq 'ARRAY' ) {
             confess "parameter post_data must be hashref or arrayref!"
         }
-        $post_data = JSON->new->utf8->encode( $data->{post_data} );
+        $post_data = $self->_json->encode($data->{post_data});
     }
     $post_data ||= '{}';
 
@@ -147,6 +148,14 @@ sub _send_request {
     return $response;
 }
 
+sub _json {
+    my ( $self ) = @_;
+
+    unless( $self->{_json} ) {
+        $self->{_json} = JSON->new;
+    }
+    return $self->{_json};
+}
 
 1;
 
