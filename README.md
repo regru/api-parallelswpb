@@ -1,47 +1,65 @@
-NAME
-    API::ParallelsWPB - client for Parallels Presence Builder API
+# NAME
 
-SYNOPSYS
-        my $client = API::ParallelsWPB->new(username => 'admin', password => 'passw0rd', server => 'builder.server.mysite.ru');
-        my $response = $client->get_sites_info;
-        if ($response->success) {
-            for my $site (@{$response->response}) {
-                say "UUID: ". $site->{ uuid };
-            }
-        }
-        else {
-            warn "Error occured: " . $response->error . ", Status: " . $response->status;
-        }
+API::ParallelsWPB - client for Parallels Presence Builder API
 
-METHODS
-    new($class, %param)
-        Creates new client instance.
+# SYNOPSIS
 
-        Required parameters: username password server
+```perl
+my $client = API::ParallelsWPB->new(username => 'admin', password => 'passw0rd', server => 'builder.server.mysite.ru');
+my $response = $client->get_sites_info;
+if ($response->success) {
+    for my $site (@{$response->response}) {
+        say "UUID: ". $site->{ uuid };
+    }
+}
+else {
+    warn "Error occured: " . $response->error . ", Status: " . $response->status;
+}
+```
+# METHODS
 
-        Optional parameters:
+## new
 
-            api_version - API version, used in API url constructing.
-            debug - debug flag, requests will be loogged to stderr
-            timeout - connection timeout
+Creates new client instance. Parameters for ```new``` are:
 
-    f_request($self, $url_array_ref, $data)
-        "Free" request. Now for internal usage only.
+- username
 
-        $data: req_type : HTTP request type: get, post, put, delete. GET by
-        default. post_data: data for POST request. Must be hashref.
+Username for connection to Parallels WebPresence Builder instance. Required parameter.
 
-SEE ALSO
-    <a href="http://download1.parallels.com/WPB/Doc/11.5/en-US/online/presence-builder-standalone-installation-administration-guide">Parallels Presence Builder Guide</a>
+- password
 
-AUTHORS
-    Alexander Ruzhnikov, "<a.ruzhnikov@reg.ru>"
+Password for connection to Parallels WebPresence Builder instance. Required parameter.
 
-    Polina Shubina, "<shubina@reg.ru>"
+- server
 
-LICENSE AND COPYRIGHT
-    This software is copyright (c) 2013 by REG.RU LLC.
+Servername or server ip address for connection to Parallels WebPresence Builder instance. Optional parameter.
 
-    This is free software; you can redistribute it and/or modify it under
-    the same terms as the Perl 5 programming language system itself.
+- api_version
+
+API version, used in API url constructing. Optional parameter.
+
+- debug
+
+Debug flag, requests will be loogged to stderr. Optional parameter.
+
+- timeout
+
+Connection timeout. Optional parameter.
+
+# SEE ALSO
+   
+[Parallels Presence Builder Guide](http://download1.parallels.com/WPB/Doc/11.5/en-US/online/presence-builder-standalone-installation-administration-guide)
+
+# AUTHORS
+
+- Alexander Ruzhnikov, "<a.ruzhnikov@reg.ru>"
+
+- Polina Shubina, "<shubina@reg.ru>"
+
+# LICENSE AND COPYRIGHT
+
+This software is copyright (c) 2013 by REG.RU LLC.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
 
