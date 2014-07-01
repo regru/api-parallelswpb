@@ -1,7 +1,7 @@
 package API::ParallelsWPB::Response;
 use strict;
 use warnings;
-use JSON::XS;
+use JSON::XS qw/decode_json/;
 
 # ABSTRACT: processing of API responses
 
@@ -22,23 +22,22 @@ sub new {
     my $success    = $res->is_success;
     my $status     = $res->status_line;
 
-    my ( $json_content, $error_json, $response, $error );
-    my $json = JSON::XS->new;
+    my ( $json_content, $response, $error );
 
     if ( $success ) {
         $json_content = $res->content;
-        $response = $json->decode( $json_content )->{response} if $json_content;
+        $response = decode_json( $json_content )->{response} if $json_content;
     }
     else {
-        $error_json = $res->content;
-        eval { $error = $json->decode( $error_json )->{error}->{message}; 1; }
+        my $error_json = $res->content;
+        eval { $error = decode_json( $error_json )->{error}->{message}; 1; }
         or do { $error = $error_json };
     }
 
     return bless(
         {
             success  => $success,
-            json     => $json,
+            json     => $json_content,
             error    => $error,
             response => $response,
             status   => $status

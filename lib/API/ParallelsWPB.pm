@@ -5,7 +5,7 @@ use warnings;
 
 use LWP::UserAgent;
 use HTTP::Request;
-use JSON;
+use JSON::XS;
 use Carp;
 use API::ParallelsWPB::Response;
 
@@ -152,7 +152,7 @@ sub _json {
     my ( $self ) = @_;
 
     unless( $self->{_json} ) {
-        $self->{_json} = JSON->new;
+        $self->{_json} = JSON::XS->new;
     }
     return $self->{_json};
 }
