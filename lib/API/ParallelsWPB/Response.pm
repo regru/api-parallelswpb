@@ -1,7 +1,7 @@
 package API::ParallelsWPB::Response;
 use strict;
 use warnings;
-use JSON;
+use JSON::XS;
 
 # ABSTRACT: processing of API responses
 
@@ -20,25 +20,32 @@ sub new {
     my ( $class, $res ) = @_;
 
     my $success    = $res->is_success;
-    my $json       = $success ? $res->content : '';
-    my $error_json = $success ? '' : $res->content;
     my $status     = $res->status_line;
 
-    my $parsed_response = $json       ? JSON::decode_json( $json )       : {};
-    my $parsed_error    = $error_json ? eval { JSON::decode_json( $error_json )} : {};
+    my ( $json_content, $error_json, $response, $error );
+    my $json = JSON::XS->new;
+
+    if ( $success ) {
+        $json_content = $res->content;
+        $response = $json->decode( $json_content )->{response} if $json_content;
+    }
+    else {
+        $error_json = $res->content;
+        eval { $error = $json->decode( $error_json )->{error}->{message}; 1; }
+        or do { $error = $error_json };
+    }
 
     return bless(
         {
             success  => $success,
             json     => $json,
-            error    => $parsed_error->{error}->{message},
-            response => $parsed_response->{response},
+            error    => $error,
+            response => $response,
             status   => $status
         },
         $class
     );
 }
-
 
 =method B<json($self)>
 
